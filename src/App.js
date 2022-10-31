@@ -44,19 +44,21 @@ function App() {
     if (answer === state[chosenIndex].english) {
       const newState = state.map((el, ind) => {
         if (ind === chosenIndex) {
-          return {...el, score: state[chosenIndex].score + 1}
+          return { ...el, score: state[chosenIndex].score + 1 };
         } else {
           return el;
         }
-      })
+      });
       setState(newState);
-      // let newIndex = Math.floor(Math.random() * state.length);
-      // while (state[newIndex].score === 3) {
-      //   newIndex = Math.floor(Math.random() * state.length);
-      // }
-      // setChosenIndex(newIndex);
     } else {
-      console.log("wrong");
+      const newState = state.map((el, ind) => {
+        if (ind === chosenIndex) {
+          return { ...el, score: 0 };
+        } else {
+          return el;
+        }
+      });
+      setState(newState);
     }
     e.preventDefault();
   }
