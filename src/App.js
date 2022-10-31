@@ -2,13 +2,14 @@ import './App.css';
 import React, { useState, useEffect } from 'react';
 import Data from './data.js';
 import ShowScore from './components/ShowScore.js';
-import ShowGerman from './components/ShowGerman.js';
+import Source from './components/Source.js';
 
 function App() {
   const [state, setState] = useState([]);
   const [chosenIndex, setChosenIndex] = useState();
   const [sessionStarted, setSessionStarted] = useState(false);
   const [answer, setAnswer] = useState("");
+  const [language, setLanguage] = useState("");
   useEffect(() => {
     const vocs = Data.map((el) => {
       el.score = 0;
@@ -21,27 +22,29 @@ function App() {
       if (state.filter(el => el.score === 3).length === state.length) {
         setSessionStarted(!sessionStarted);
         setChosenIndex();
-        const vocs = Data.map((el) => {
-          el.score = 0;
-          return el;
-        });
-        setState(vocs);
+        setState([]);
       } else {
         let newIndex = Math.floor(Math.random() * state.length);
         while (state[newIndex].score === 3) {
           newIndex = Math.floor(Math.random() * state.length);
         }
+        const chooseLanguage = Math.floor(Math.random() * 2);
+        chooseLanguage === 0 ? setLanguage("german") : setLanguage("english");
         setChosenIndex(newIndex);
+
       }
     }
   }, [state]);
   const startSession = () => {
-    let index = Math.floor(Math.random() * state.length);
+    const index = Math.floor(Math.random() * state.length);
     setChosenIndex(index);
     setSessionStarted(!sessionStarted);
+    const chooseLanguage = Math.floor(Math.random() * 2);
+    chooseLanguage === 0 ? setLanguage("german") : setLanguage("english");
   }
   const checkResult = (e) => {
-    if (answer === state[chosenIndex].english) {
+    const answerLanguage = language === "german" ? "english" : "german";
+    if (answer === state[chosenIndex][answerLanguage]) {
       const newState = state.map((el, ind) => {
         if (ind === chosenIndex) {
           return { ...el, score: state[chosenIndex].score + 1 };
@@ -67,7 +70,7 @@ function App() {
       <h1>Vocabulary Trainer</h1>
       <div className="container">
         <ShowScore scoreData={state} />
-        <ShowGerman vocabulary={state[chosenIndex]?.german} />
+        <Source vocabulary={state[chosenIndex]?.[language]} />
         <form onSubmit={checkResult}>
           <label htmlFor="answer">Answer</label>
           <input
