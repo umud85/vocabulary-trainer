@@ -1,26 +1,25 @@
 import React from 'react';
 import styles from '../styles/Score.module.css';
 
-
-function showScore(props) {
+function ShowScore(props) { 
   return <div className={styles['flex']}>
     <div className={styles['flex--inner']}>
       <span>Start</span>
-      <span>{props.scoreData.base.length}</span>
+      <span>{props.scoreData.filter(el => el.score === 0).length}</span>
     </div>
     <div className={styles['flex--inner']}>
       <span>Step 1</span>
-      <span>{props.scoreData.step1.length}</span>
+      <span>{props.scoreData.filter(el => el.score === 1).length}</span>
     </div>
     <div className={styles['flex--inner']}>
       <span>Step 2</span>
-      <span>{props.scoreData.step2.length}</span>
+      <span>{props.scoreData.filter(el => el.score === 2).length}</span>
     </div>
     <div className={styles['flex--inner']}>
       <span>Finished</span>
-      <span>{props.scoreData.finished.length}</span>
+      <span>{props.scoreData.filter(el => el.score === 3).length}</span>
     </div>
   </div>
 }
 
-export default showScore;
+export default ShowScore;

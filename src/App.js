@@ -1,39 +1,60 @@
 import './App.css';
 import React, { useState, useEffect } from 'react';
 import Data from './data.js';
-import Score from './components/Score.js';
-import German from './components/German.js';
-import English from './components/English.js'
+import ShowScore from './components/ShowScore.js';
+import ShowGerman from './components/ShowGerman.js';
 
 function App() {
-  const [state, setState] = useState({
-    base: [...Data],
-    step1: [],
-    step2: [],
-    finished: [],
-  });
-  const [chosenPair, setChosenPair] = useState({});
-  const [currentVoc, setCurrentVoc] = useState("");
+  const [state, setState] = useState([]);
+  const [chosenIndex, setChosenIndex] = useState();
   const [sessionStarted, setSessionStarted] = useState(false);
   const [answer, setAnswer] = useState("");
   useEffect(() => {
-
+    const vocs = Data.map((el) => {
+      el.score = 0;
+      return el;
+    });
+    setState(vocs);
   }, []);
+  useEffect(() => {
+    if (chosenIndex !== undefined) {
+      if (state.filter(el => el.score === 3).length === state.length) {
+        setSessionStarted(!sessionStarted);
+        setChosenIndex();
+        const vocs = Data.map((el) => {
+          el.score = 0;
+          return el;
+        });
+        setState(vocs);
+      } else {
+        let newIndex = Math.floor(Math.random() * state.length);
+        while (state[newIndex].score === 3) {
+          newIndex = Math.floor(Math.random() * state.length);
+        }
+        setChosenIndex(newIndex);
+      }
+    }
+  }, [state]);
   const startSession = () => {
-    const index = Math.floor(Math.random() * state.base.length);
-    setChosenPair(state.base[index]);
-    setCurrentVoc(state.base[index].german);
-    setSessionStarted(true);
+    let index = Math.floor(Math.random() * state.length);
+    setChosenIndex(index);
+    setSessionStarted(!sessionStarted);
   }
   const checkResult = (e) => {
-    if (answer === chosenPair.english) {
-      setState({
-        ...state,
-        base: state.base.filter((el, ind) => {
-          return el !== chosenPair;
-        }),
-        step1: [...state.step1, chosenPair],
-      });
+    if (answer === state[chosenIndex].english) {
+      const newState = state.map((el, ind) => {
+        if (ind === chosenIndex) {
+          return {...el, score: state[chosenIndex].score + 1}
+        } else {
+          return el;
+        }
+      })
+      setState(newState);
+      // let newIndex = Math.floor(Math.random() * state.length);
+      // while (state[newIndex].score === 3) {
+      //   newIndex = Math.floor(Math.random() * state.length);
+      // }
+      // setChosenIndex(newIndex);
     } else {
       console.log("wrong");
     }
@@ -43,8 +64,8 @@ function App() {
     <div className="App">
       <h1>Vocabulary Trainer</h1>
       <div className="container">
-        <Score scoreData={state} />
-        <German vocabulary={currentVoc} />
+        <ShowScore scoreData={state} />
+        <ShowGerman vocabulary={state[chosenIndex]?.german} />
         <form onSubmit={checkResult}>
           <label htmlFor="answer">Answer</label>
           <input
