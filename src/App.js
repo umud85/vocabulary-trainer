@@ -1,8 +1,9 @@
 import './App.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Data from './data.js';
 import ShowScore from './components/ShowScore.js';
 import Source from './components/Source.js';
+import Destination from './components/Destination.js';
 
 function App() {
   const [state, setState] = useState([]);
@@ -10,6 +11,7 @@ function App() {
   const [sessionStarted, setSessionStarted] = useState(false);
   const [answer, setAnswer] = useState("");
   const [language, setLanguage] = useState("");
+  const inputEl = useRef(null);
   useEffect(() => {
     const vocs = Data.map((el) => {
       el.score = 0;
@@ -31,7 +33,6 @@ function App() {
         const chooseLanguage = Math.floor(Math.random() * 2);
         chooseLanguage === 0 ? setLanguage("german") : setLanguage("english");
         setChosenIndex(newIndex);
-
       }
     }
   }, [state]);
@@ -41,6 +42,7 @@ function App() {
     setSessionStarted(!sessionStarted);
     const chooseLanguage = Math.floor(Math.random() * 2);
     chooseLanguage === 0 ? setLanguage("german") : setLanguage("english");
+    inputEl.current.focus();
   }
   const checkResult = (e) => {
     const answerLanguage = language === "german" ? "english" : "german";
@@ -63,6 +65,8 @@ function App() {
       });
       setState(newState);
     }
+    setAnswer("");
+    inputEl.current.focus()
     e.preventDefault();
   }
   return (
@@ -70,15 +74,20 @@ function App() {
       <h1>Vocabulary Trainer</h1>
       <div className="container">
         <ShowScore scoreData={state} />
-        <Source vocabulary={state[chosenIndex]?.[language]} />
+        <Source
+          vocabulary={state[chosenIndex]?.[language]}
+          language={language}
+        />
+        <Destination language={language} />
         <form onSubmit={checkResult}>
-          <label htmlFor="answer">Answer</label>
           <input
+            placeholder='Your answer'
             type="text"
             name="answer"
             id="answer"
             value={answer}
             onChange={(e) => setAnswer(e.target.value)}
+            ref={inputEl}
           />
           { !sessionStarted &&
             <button onClick={startSession}>Start</button>}
