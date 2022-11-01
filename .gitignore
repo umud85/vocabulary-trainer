@@ -22,5 +22,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-/src/vokabeln.csv
-/src/vokabeln.json
+src/vokabeln.csv
+src/vokabeln.json
