@@ -1,9 +1,11 @@
 .container {
-  height: 5em;
-  background-color: aliceblue;
+  height: 6em;
+  border: 1px solid black;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
 }
 
 img {

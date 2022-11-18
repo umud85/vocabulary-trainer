@@ -71,7 +71,7 @@ function App() {
   }
   return (
     <div className="App">
-      <h1>Vocabulary Trainer</h1>
+      <h1>Vocabulary Trainer by Umut</h1>
       <div className="container">
         <ShowScore scoreData={state} />
         <Source
@@ -92,7 +92,8 @@ function App() {
           { !sessionStarted &&
             <button onClick={startSession}>Start</button>}
           {sessionStarted && 
-          <input type="submit" /> }
+            <button type="submit">Submit
+            </button>}
         </form>
       </div>
     </div>

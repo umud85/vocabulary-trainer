@@ -25,7 +25,7 @@ const data = [
   },
   {
     english: "car",
-    german: "auto",
+    german: "Auto",
   }
 ];
 

@@ -2,8 +2,8 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-  height: 5em;
-  background-color: gray;
+  height: 7em;
+  background-color: #1829EB;
   color: white;
   font-size: 1.2rem;
 }
